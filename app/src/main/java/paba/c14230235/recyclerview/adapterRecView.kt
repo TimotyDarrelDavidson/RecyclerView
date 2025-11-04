@@ -3,6 +3,7 @@ package paba.c14230235.recyclerview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -37,6 +38,6 @@ class adapterRecView (private val listWayang: ArrayList<dcWayang>) : RecyclerVie
         val _namaWayang = view.findViewById< TextView>(R.id.namaWayang)
         val _karakterWayang = view.findViewById< TextView>(R.id.karakterWayang)
         val _deskripsiWayang = view.findViewById< TextView>(R.id.deskripsiWayang)
-        val _gambarWayang = view.findViewById< TextView>(R.id.gambarWayang)
+        val _gambarWayang = view.findViewById< ImageView>(R.id.gambarWayang)
     }
 }
