@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
@@ -35,6 +36,11 @@ class adapterRecView (private val listWayang: ArrayList<dcWayang>) : RecyclerVie
             .load(wayang.foto)
             .resize(100,100)
             .into(holder._gambarWayang)
+
+        holder._gambarWayang.setOnClickListener {
+            Toast.makeText(holder.itemView.context, wayang.nama, Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     override fun getItemCount(): Int {
