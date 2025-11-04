@@ -1,5 +1,6 @@
 package paba.c14230235.recyclerview
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -67,9 +68,16 @@ class MainActivity : AppCompatActivity() {
 
         adapterWayang.setOnItemClickCallback(object : adapterRecView.OnItemClickCallback {
             override fun onItemClicked(data: dcWayang) {
-                Toast.makeText(
-                    this@MainActivity, data.nama, Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    this@MainActivity, data.nama, Toast.LENGTH_SHORT
+//                ).show()
+
+                val intent = Intent(
+                    this@MainActivity,
+                    detWayang::class.java
+                )
+                intent.putExtra("kirimData", data)
+                startActivity(intent)
             }
         })
     }
