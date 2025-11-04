@@ -2,6 +2,7 @@ package paba.c14230235.recyclerview
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -60,6 +61,16 @@ class MainActivity : AppCompatActivity() {
     fun TampilkanData() {
         _rvWayang.layoutManager = LinearLayoutManager(
             this)
-        _rvWayang.adapter = adapterRecView(arWayang)
+
+        val adapterWayang = adapterRecView(arWayang)
+        _rvWayang.adapter = adapterWayang
+
+        adapterWayang.setOnItemClickCallback(object : adapterRecView.OnItemClickCallback {
+            override fun onItemClicked(data: dcWayang) {
+                Toast.makeText(
+                    this@MainActivity, data.nama, Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 }
