@@ -2,29 +2,32 @@ package paba.c14230235.recyclerview
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var _nama : MutableList<String>
-    private lateinit var _karakter : MutableList<String>
-    private lateinit var _deskripsi : MutableList<String>
-    private lateinit var _gambar : MutableList<String>
+    private var _nama : MutableList<String> = emptyList<String>().toMutableList()
+    private var _karakter : MutableList<String> = emptyList<String>().toMutableList()
+    private var _deskripsi : MutableList<String> = emptyList<String>().toMutableList()
+    private var _gambar : MutableList<String> = emptyList<String>().toMutableList()
 
     private var arWayang = arrayListOf<dcWayang>()
 
     private lateinit var _rvWayang : RecyclerView
+
+    lateinit var sp : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +39,26 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        _rvWayang = findViewById<RecyclerView>(R.id.rvWayang)
-        SiapkanData()
+        sp = getSharedPreferences("dataSP", MODE_PRIVATE)
+
+        val gson = Gson()
+        val isiSP = sp.getString("spWayang", null)
+        val type = object : TypeToken<ArrayList<dcWayang>>() {}.type
+        if (isiSP!=null)
+            arWayang = gson.fromJson(isiSP, type)
+
+        _rvWayang = findViewById(R.id.rvWayang)
+        if (arWayang.size == 0) {
+            SiapkanData()
+        } else {
+            arWayang.forEach {
+                _nama.add(it.nama)
+                _gambar.add(it.foto)
+                _deskripsi.add(it.deskripsi)
+                _karakter.add(it.karakter)
+            }
+            arWayang.clear()
+        }
         TambahData()
         TampilkanData()
     }
@@ -50,17 +71,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun TambahData() {
-        arWayang.clear()
-        for (position in _nama.indices) {
-            val data = dcWayang(
-                _gambar[position],
-                _nama[position],
-                _karakter[position],
-                _deskripsi[position]
-            )
-            arWayang.add(data)
+        val gson = Gson()
+
+        sp.edit {
+            arWayang.clear()
+
+            for (position in _nama.indices) {
+                val data = dcWayang(
+                    _gambar[position],
+                    _nama[position],
+                    _karakter[position],
+                    _deskripsi[position]
+                )
+                arWayang.add(data)
+            }
+
+            val json = gson.toJson(arWayang)
+            putString("spWayang", json)
         }
     }
+
 
     fun TampilkanData() {
         _rvWayang.layoutManager = LinearLayoutManager(
